@@ -3,11 +3,27 @@
 #include <iostream>
 #include <stdexcept>
 
+template<typename T>
+class Node {
+public:
+    T value;
+    Node *next;
+    Node(const T val);
+    Node(const T val, Node<T> *nextPtr);
+    ~Node();
+
+};
+
+
 namespace mtm {
 
-    template <typename T>
+    template<typename T>
     class SortedList {
     public:
+        Node<T> *head;
+        int length;
+        SortedList();gi
+
         /**
          *
          * the class should support the following public interface:
@@ -34,24 +50,24 @@ namespace mtm {
 
     };
 
-    template <class T>
+    template<class T>
     class SortedList<T>::ConstIterator {
-    /**
-     * the class should support the following public interface:
-     * if needed, use =defualt / =delete
-     *
-     * constructors and destructor:
-     * 1. a ctor(or ctors) your implementation needs
-     * 2. copy constructor
-     * 3. operator= - assignment operator
-     * 4. ~ConstIterator() - destructor
-     *
-     * operators:
-     * 5. operator* - returns the element the iterator points to
-     * 6. operator++ - advances the iterator to the next element
-     * 7. operator!= - returns true if the iterator points to a different element
-     *
-     */
+        /**
+         * the class should support the following public interface:
+         * if needed, use =defualt / =delete
+         *
+         * constructors and destructor:
+         * 1. a ctor(or ctors) your implementation needs
+         * 2. copy constructor
+         * 3. operator= - assignment operator
+         * 4. ~ConstIterator() - destructor
+         *
+         * operators:
+         * 5. operator* - returns the element the iterator points to
+         * 6. operator++ - advances the iterator to the next element
+         * 7. operator!= - returns true if the iterator points to a different element
+         *
+         */
     };
 }
 

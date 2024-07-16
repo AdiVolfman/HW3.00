@@ -5,14 +5,16 @@
 
 template<typename T>
 class Node {
-public:
+private:
+    friend SortedList<T>;
+    friend SortedList<T>::ConstIterator;
     T value;
     Node *next;
     Node(const T &val);
     Node(const T &val, Node<T> *nextPtr);
     Node(const Node<T> &node);
     ~Node();
-    void insertNext(Node<T> *node);
+    void insertNext(T &va);
     void removeNext(Node<T> *node);
 };
 
@@ -23,9 +25,21 @@ namespace mtm {
     class SortedList {
     public:
         Node<T> *head;
-        int length;
-        SortedList();
+        int size;
+        SortedList() = default;
+        SortedList(const SortedList<T> &list);
+        SortedList<T> &operator=(const SortedList<T> &list);
+        ~SortedList();
 
+        class ConstIterator;
+
+        void insert(T newValue);
+        void remove(ConstIterator iterator);
+        int length();
+
+
+        ConstIterator begin() const;
+        ConstIterator end() const;
         /**
          *
          * the class should support the following public interface:
@@ -52,8 +66,23 @@ namespace mtm {
 
     };
 
+
     template<class T>
     class SortedList<T>::ConstIterator {
+    private:
+        Node<T> *ptr;
+
+        ConstIterator(Node<T> *node) : ptr(node) {};
+    public:
+        ~ConstIterator() = default;
+        ConstIterator(ConstIterator &iterator) = default;
+        ConstIterator &operator=(const ConstIterator &list) = default;
+
+        SortedList<T> *list;
+        friend SortedList<T>;
+        ConstIterator &operator++();
+        bool operator!=(const ConstIterator &other) const;
+        const T &operator*();
         /**
          * the class should support the following public interface:
          * if needed, use =defualt / =delete
@@ -71,5 +100,9 @@ namespace mtm {
          *
          */
     };
+
+
 }
+
+
 

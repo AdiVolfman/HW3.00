@@ -8,10 +8,12 @@ class Node {
 public:
     T value;
     Node *next;
-    Node(const T val);
-    Node(const T val, Node<T> *nextPtr);
+    Node(const T &val);
+    Node(const T &val, Node<T> *nextPtr);
+    Node(const Node<T> &node);
     ~Node();
-
+    void insertNext(Node<T> *node);
+    void removeNext(Node<T> *node);
 };
 
 
@@ -22,7 +24,7 @@ namespace mtm {
     public:
         Node<T> *head;
         int length;
-        SortedList();gi
+        SortedList();
 
         /**
          *

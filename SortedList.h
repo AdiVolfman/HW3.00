@@ -118,7 +118,12 @@ Node<T>::Node(const T &val, Node<T> *nextPtr) :value(T(val)),
 template<typename T>
 Node<T>::Node(const Node<T> &node): value(node.value), next(nullptr) {
     if (node.next != nullptr) {
-        next = new Node(*(node.next));
+        try {
+            next = new Node(*(node.next));
+        } catch (std::bad_alloc) {
+            delete this;
+            throw;
+        }
     }
 }
 
@@ -136,16 +141,17 @@ namespace mtm {
 
     template<typename T>
     SortedList<T>::SortedList(const SortedList<T> &list):
-            head(new Node<T>(list.head)), size(0) {}
+            head(new Node<T>(*list.head)), size(list.size) {}
 
     template<typename T>
     SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
         if (this == &list) {
             return *this;
         }
+        Node<T> temp = new Node<T>(*list.head);
         delete this->head;
         size = list.size;
-        head = new Node<T>(*list.head);
+        head = temp;
         return *this;
     }
 
@@ -171,6 +177,7 @@ namespace mtm {
             ptr->next = node;
         }
         size++;
+
     }
 
     template<typename T>
@@ -179,13 +186,17 @@ namespace mtm {
         if (currPtr != iterator) {
             ++currPtr;
             ConstIterator prevPtr = this->head;
-            while (currPtr != iterator) {
+            while (currPtr != nullptr && currPtr != iterator) {
                 ++currPtr;
                 ++prevPtr;
             }
-            prevPtr.ptr->next = currPtr.ptr->next;
-            currPtr.ptr->next = nullptr;
-            delete currPtr.ptr;
+            if (currPtr.ptr == iterator.ptr) {
+                prevPtr.ptr->next = currPtr.ptr->next;
+                currPtr.ptr->next = nullptr;
+                delete currPtr.ptr;
+            } else {
+                throw std::out_of_range("Iterator do not exist");
+            }
         } else {
             Node<T> *temp = head;
             this->head = head->next;
@@ -223,9 +234,10 @@ namespace mtm {
     template<class T>
     typename SortedList<T>::ConstIterator &
     SortedList<T>::ConstIterator::operator++() {
-        if (ptr != nullptr) {
-            ptr = ptr->next;
+        if (!ptr) {
+            throw std::out_of_range("Iterator out of range");
         }
+        ptr = ptr->next;
         return *this;
     }
 

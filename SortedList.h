@@ -37,6 +37,10 @@ namespace mtm {
         template<typename U>
         friend std::ostream &
         operator<<(std::ostream &output, const SortedList<U> &list);
+        template<class Predict>
+        SortedList<T> filter(Predict p) const;
+        template<class Operation>
+        SortedList<T> apply(Operation op) const;
 
         ConstIterator begin() const;
         ConstIterator end() const;
@@ -65,6 +69,28 @@ namespace mtm {
          */
 
     };
+
+    template<typename T>
+    template<class Operation>
+    SortedList<T> SortedList<T>::apply(Operation op) const {
+        SortedList<T> newS;
+        for (T val: *this) {
+            newS.insert(op(val));
+        }
+        return newS;
+    }
+
+    template<typename T>
+    template<class Predict>
+    SortedList<T> SortedList<T>::filter(Predict p) const {
+        SortedList<T> newS;
+        for (T val: (*this)) {
+            if (p(val)) {
+                newS.insert(val);
+            }
+        }
+        return newS;
+    }
 
 
     template<class T>
@@ -136,7 +162,7 @@ namespace mtm {
 
     template<typename T>
     SortedList<T>::SortedList(const SortedList<T> &list):
-            head(new Node<T>(list.head)), size(0) {}
+            head(new Node<T>(*list.head)), size(0) {}
 
     template<typename T>
     SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
@@ -243,6 +269,7 @@ namespace mtm {
         }
         return this->ptr->value;
     }
+
 }
 
 

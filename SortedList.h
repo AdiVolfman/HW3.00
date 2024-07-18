@@ -4,24 +4,23 @@
 #include <stdexcept>
 
 
-template<typename T>
-class Node {
-public:
-    T value;
-    Node *next;
-    Node(const T &val);
-    Node(const T &val, Node<T> *nextPtr);
-    Node(const Node<T> &node);
-    ~Node();
-
-};
-
 namespace mtm {
 
     template<typename T>
     class SortedList {
     private:
-        Node<T> *head;
+        class Node {
+        private:
+            T value;
+            Node *next;
+            Node(const T &val);
+            Node(const T &val, SortedList::Node *nextPtr);
+            Node(const SortedList<T>::Node &node);
+            ~Node();
+            friend SortedList<T>;
+        };
+
+        SortedList<T>::Node *head;
         int size;
     public:
         SortedList();
@@ -70,9 +69,9 @@ namespace mtm {
     template<class T>
     class SortedList<T>::ConstIterator {
     private:
-        Node<T> *ptr;
+        SortedList<T>::Node *ptr;
 
-        ConstIterator(Node<T> *node) : ptr(node) {};
+        ConstIterator(SortedList<T>::Node *node) : ptr(node) {};
     public:
         ConstIterator() = default;
         ConstIterator(const ConstIterator &iterator) = default;
@@ -105,50 +104,49 @@ namespace mtm {
 
 }
 
+namespace mtm {
+    template<typename T>
+    SortedList<T>::Node::Node(const T &val) : value(T(val)), next(nullptr) {
+    }
 
-template<typename T>
-Node<T>::Node(const T &val) : value(T(val)), next(nullptr) {
-}
+    template<typename T>
+    SortedList<T>::Node::Node(const T &val, SortedList::Node *nextPtr) :value(
+            T(val)), next(nextPtr) {}
 
-template<typename T>
-Node<T>::Node(const T &val, Node<T> *nextPtr) :value(T(val)),
-                                               next(nextPtr) {
-}
-
-template<typename T>
-Node<T>::Node(const Node<T> &node): value(node.value), next(nullptr) {
-    if (node.next != nullptr) {
-        try {
-            next = new Node(*(node.next));
-        } catch (std::bad_alloc) {
-            delete this;
-            throw;
+    template<typename T>
+    SortedList<T>::Node::Node(const SortedList::Node &node): value(node.value),
+                                                             next(nullptr) {
+        if (node.next != nullptr) {
+            try {
+                next = new Node(*(node.next));
+            } catch (std::bad_alloc) {
+                delete this;
+                throw;
+            }
         }
     }
-}
 
-template<typename T>
-Node<T>::~Node() {
-    if (next != nullptr) {
-        delete next;
+    template<typename T>
+    SortedList<T>::Node::~Node() {
+        if (next != nullptr) {
+            delete next;
+        }
     }
-}
 
 
-namespace mtm {
     template<typename T>
     SortedList<T>::SortedList():head(nullptr), size(0) {}
 
     template<typename T>
     SortedList<T>::SortedList(const SortedList<T> &list):
-            head(new Node<T>(*list.head)), size(list.size) {}
+            head(new SortedList<T>::Node(*list.head)), size(list.size) {}
 
     template<typename T>
     SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
         if (this == &list) {
             return *this;
         }
-        Node<T> temp = new Node<T>(*list.head);
+        SortedList<T>::Node temp = new Node(*list.head);
         delete this->head;
         size = list.size;
         head = temp;
@@ -167,13 +165,13 @@ namespace mtm {
     template<typename T>
     void SortedList<T>::insert(const T &newValue) {
         if (head == nullptr || newValue > this->head->value) {
-            head = new Node<T>(newValue, head);
+            head = new SortedList<T>::Node(newValue, head);
         } else {
-            Node<T> *ptr = this->head;
+            SortedList<T>::Node *ptr = this->head;
             while (ptr->next != nullptr && ptr->next->value > newValue) {
                 ptr = ptr->next;
             }
-            Node<T> *node = new Node<T>(newValue, ptr->next);
+            SortedList<T>::Node *node = new Node(newValue, ptr->next);
             ptr->next = node;
         }
         size++;
@@ -198,7 +196,7 @@ namespace mtm {
                 throw std::out_of_range("Iterator do not exist");
             }
         } else {
-            Node<T> *temp = head;
+            SortedList<T>::Node *temp = head;
             this->head = head->next;
             delete temp;
         }

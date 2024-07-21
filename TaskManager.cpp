@@ -50,7 +50,12 @@ Task addPriority(Task task, int priority, TaskType type) {
 
 void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     for (int i = 0; i < personAmount; i++) {
-        (*persons[i]).getTasks().apply(addPriority());
+        (*persons[i]).getTasks().apply([=](Task task) {
+            return Task(
+                    task.getPriority() + (task.getType() == type) * priority,
+                    task.getType(),
+                    task.getDescription());
+        });
     }
 }
 

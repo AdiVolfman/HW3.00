@@ -213,7 +213,7 @@ namespace mtm {
                 ++currPtr;
                 ++prevPtr;
             }
-            if (currPtr.ptr == iterator.ptr) {
+            if (currPtr.ptr != nullptr && currPtr.ptr == iterator.ptr) {
                 prevPtr.ptr->next = currPtr.ptr->next;
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;

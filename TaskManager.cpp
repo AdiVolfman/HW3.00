@@ -59,6 +59,43 @@ void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     }
 }
 
+void TaskManager::printAllEmployees() const {
+    for (int i = 0; i < personAmount; i++) {
+        std::cout << (*persons[i]) << std::endl;
+    }
+}
+
+
+SortedList<Task> TaskManager::mergeAll() const {
+    SortedList<Task> all;
+    for (int i = 0; i < personAmount; i++) {
+        for (Task task: (*persons[i]).getTasks()) {
+            all.insert(task);
+        }
+    }
+    return all;
+}
+
+void TaskManager::printAllTasks() const {
+    SortedList<Task> all = mergeAll();
+    for (Task task: all) {
+        std::cout << task << std::endl;
+    }
+}
+
+void TaskManager::printTasksByType(TaskType type) const {
+    SortedList<Task> all = mergeAll();
+    SortedList<Task> filtered = all.filter([=](Task task) {
+        return task.getType() == type;
+    });
+    for (Task task: all) {
+        std::cout << task << std::endl;
+    }
+}
+
+
+
+
 
 
 

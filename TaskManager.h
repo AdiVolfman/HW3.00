@@ -18,6 +18,8 @@ private:
     Person *persons[MAX_PERSONS];
     int personAmount;
 
+    SortedList<Task> mergeAll() const;
+
 public:
     /**
      * @brief Default constructor to create a TaskManager object.

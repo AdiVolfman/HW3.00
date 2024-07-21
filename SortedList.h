@@ -31,7 +31,7 @@ namespace mtm {
         class ConstIterator;
 
         void insert(const T &newValue);
-        void remove(SortedList::ConstIterator &iterator);
+        void remove(const SortedList::ConstIterator &iterator);
         int length() const;
         template<typename U>
         friend std::ostream &
@@ -172,7 +172,7 @@ namespace mtm {
         if (this == &list) {
             return *this;
         }
-        SortedList<T>::Node temp = new Node(*list.head);
+        SortedList<T>::Node *temp = new Node(*list.head);
         delete this->head;
         size = list.size;
         head = temp;
@@ -204,7 +204,7 @@ namespace mtm {
     }
 
     template<typename T>
-    void SortedList<T>::remove(SortedList::ConstIterator &iterator) {
+    void SortedList<T>::remove(const SortedList::ConstIterator &iterator) {
         ConstIterator currPtr = this->head;
         if (currPtr != iterator) {
             ++currPtr;

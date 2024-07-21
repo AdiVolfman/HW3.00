@@ -1,5 +1,11 @@
 #include "TaskManager.h"
 
+TaskManager::TaskManager() : personAmount(0) {
+    for (int i = 0; i < MAX_PERSONS; ++i) {
+        persons[i] = nullptr;
+    }
+}
+
 TaskManager::~TaskManager() {
     for (int i = 0; i < personAmount; i++) {
         delete persons[i];
@@ -11,7 +17,7 @@ void TaskManager::assignTask(const string &personName, const Task &task) {
         if (personName == (*persons[i]).getName()) {
             Task temp = task;
             temp.setId((*persons[i]).getTasks().length());
-            (*persons[i]).assignTask(task);
+            (*persons[i]).assignTask(temp);
             return;
         }
     }
@@ -92,6 +98,8 @@ void TaskManager::printTasksByType(TaskType type) const {
         std::cout << task << std::endl;
     }
 }
+
+
 
 
 

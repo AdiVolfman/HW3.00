@@ -145,7 +145,7 @@ namespace mtm {
         if (node.next != nullptr) {
             try {
                 next = new Node(*(node.next));
-            } catch (std::bad_alloc) {
+            } catch (const std::bad_alloc &error) {
                 delete this;
                 throw;
             }
@@ -213,7 +213,7 @@ namespace mtm {
                 ++currPtr;
                 ++prevPtr;
             }
-            if (currPtr.ptr != nullptr && currPtr.ptr == iterator.ptr) {
+            if (currPtr.ptr == iterator.ptr) {
                 prevPtr.ptr->next = currPtr.ptr->next;
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;
@@ -221,9 +221,10 @@ namespace mtm {
                 throw std::out_of_range("Iterator do not exist");
             }
         } else {
-            SortedList<T>::Node *temp = head;
-            this->head = head->next;
-            delete temp;
+            SortedList<T>::Node *temp = head->next;
+            this->head->next = nullptr;
+            delete head;
+            this->head = temp;
         }
         size--;
     }
@@ -259,9 +260,10 @@ namespace mtm {
     SortedList<T>::ConstIterator::operator++() {
         if (!ptr) {
             throw std::out_of_range("Iterator out of range");
+        } else {
+            ptr = ptr->next;
+            return *this;
         }
-        ptr = ptr->next;
-        return *this;
     }
 
     template<typename T>

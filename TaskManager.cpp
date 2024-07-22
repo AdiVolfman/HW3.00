@@ -43,9 +43,9 @@ void TaskManager::completeTask(const string &personName) {
     throw std::runtime_error("Person isn't exist");
 }
 
-Task addPriority(Task task, int priority, TaskType type);
+Task addPriority(Task &task, int priority, TaskType type);
 
-Task addPriority(Task task, int priority, TaskType type) {
+Task addPriority(Task &task, int priority, TaskType type) {
     Task newTask(task.getPriority() + (task.getType() == type) * priority,
                  task.getType(),
                  task.getDescription());
@@ -56,7 +56,7 @@ Task addPriority(Task task, int priority, TaskType type) {
 
 void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     for (int i = 0; i < personAmount; i++) {
-        SortedList<Task> temp = (*persons[i]).getTasks().apply([=](Task task) {
+        SortedList<Task> temp = (*persons[i]).getTasks().apply([=](Task &task) {
             return addPriority(task, priority, type);
         });
         (*persons[i]).setTasks(temp);

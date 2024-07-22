@@ -17,7 +17,7 @@ private:
     // Note - Additional private fields and methods can be added if needed.
     Person *persons[MAX_PERSONS];
     int personAmount;
-
+    int taskCounter;
     SortedList<Task> mergeAll() const;
 
 public:

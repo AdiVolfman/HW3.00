@@ -1,6 +1,6 @@
 #include "TaskManager.h"
 
-TaskManager::TaskManager() : personAmount(0) {
+TaskManager::TaskManager() : personAmount(0), taskCounter(0) {
     for (int i = 0; i < MAX_PERSONS; ++i) {
         persons[i] = nullptr;
     }
@@ -13,21 +13,21 @@ TaskManager::~TaskManager() {
 }
 
 void TaskManager::assignTask(const string &personName, const Task &task) {
+    Task temp = task;
+    temp.setId(taskCounter);
     for (int i = 0; i < personAmount; i++) {
         if (personName == (*persons[i]).getName()) {
-            Task temp = task;
-            temp.setId((*persons[i]).getTasks().length());
             (*persons[i]).assignTask(temp);
+            taskCounter++;
             return;
         }
     }
     if (personAmount == MAX_PERSONS) {
         throw std::runtime_error("Task manager is full");
     } else {
-        Task temp = task;
-        temp.setId(0);
         persons[personAmount] = new Person(personName);
         (*persons[personAmount]).assignTask(temp);
+        taskCounter++;
         personAmount++;
     }
 }
@@ -36,6 +36,7 @@ void TaskManager::completeTask(const string &personName) {
     for (int i = 0; i < personAmount; i++) {
         if (personName == (*persons[i]).getName()) {
             (*persons[i]).completeTask();
+            taskCounter--;
             return;
         }
     }
@@ -56,12 +57,10 @@ Task addPriority(Task task, int priority, TaskType type) {
 
 void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     for (int i = 0; i < personAmount; i++) {
-        (*persons[i]).getTasks().apply([=](Task task) {
-            return Task(
-                    task.getPriority() + (task.getType() == type) * priority,
-                    task.getType(),
-                    task.getDescription());
+        SortedList<Task> temp = (*persons[i]).getTasks().apply([=](Task task) {
+            return addPriority(task, priority, type);
         });
+        (*persons[i]).setTasks(temp);
     }
 }
 
@@ -94,7 +93,7 @@ void TaskManager::printTasksByType(TaskType type) const {
     SortedList<Task> filtered = all.filter([=](Task task) {
         return task.getType() == type;
     });
-    for (Task task: all) {
+    for (Task task: filtered) {
         std::cout << task << std::endl;
     }
 }

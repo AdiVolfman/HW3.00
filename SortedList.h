@@ -191,14 +191,13 @@ namespace mtm {
     template<typename T>
     void SortedList<T>::insert(const T &newValue) {
         if (head == nullptr || newValue > this->head->value) {
-            head = new SortedList<T>::Node(newValue, head);
+            head = new Node(newValue, head);
         } else {
             SortedList<T>::Node *ptr = this->head;
             while (ptr->next != nullptr && ptr->next->value > newValue) {
                 ptr = ptr->next;
             }
-            SortedList<T>::Node *node = new Node(newValue, ptr->next);
-            ptr->next = node;
+            ptr->next = new Node(newValue, ptr->next);
         }
         size++;
     }
@@ -213,15 +212,16 @@ namespace mtm {
                 ++currPtr;
                 ++prevPtr;
             }
-            if (currPtr.ptr == iterator.ptr) {
+            if (currPtr.ptr != nullptr && currPtr.ptr == iterator.ptr) {
                 prevPtr.ptr->next = currPtr.ptr->next;
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;
-            } else {
-                throw std::out_of_range("Iterator do not exist");
             }
+            //else {
+            //     throw std::out_of_range("Iterator do not exist");
+            //}
         } else {
-            SortedList<T>::Node *temp = head->next;
+            Node *temp = head->next;
             this->head->next = nullptr;
             delete head;
             this->head = temp;

@@ -42,8 +42,7 @@ typedef bool (*testFunc)(void);
 
 // tests
 
-class ExceptionThrowingType
-{
+class ExceptionThrowingType {
 public:
     static int copy_count;
     static const int max_copies = 3; // Exception will be thrown on the third copy
@@ -52,22 +51,18 @@ public:
     ExceptionThrowingType(int value = 0) : value(value) {}
 
     // Copy constructor
-    ExceptionThrowingType(const ExceptionThrowingType &other) : value(other.value)
-    {
-        if ((++copy_count >= max_copies) && (throw_state))
-        {
+    ExceptionThrowingType(const ExceptionThrowingType &other) : value(
+            other.value) {
+        if ((++copy_count >= max_copies) && (throw_state)) {
             throw std::bad_alloc();
         }
     }
 
     // Assignment operator
-    ExceptionThrowingType &operator=(const ExceptionThrowingType &other)
-    {
-        if (this != &other)
-        {
+    ExceptionThrowingType &operator=(const ExceptionThrowingType &other) {
+        if (this != &other) {
             value = other.value;
-            if (++copy_count >= max_copies)
-            {
+            if (++copy_count >= max_copies) {
                 throw std::bad_alloc();
             }
         }
@@ -75,23 +70,20 @@ public:
     }
 
     // Comparison operator
-    bool operator>(const ExceptionThrowingType &other) const
-    {
+    bool operator>(const ExceptionThrowingType &other) const {
         return value > other.value;
     }
 
-    int getValue() const
-    {
+    int getValue() const {
         return value;
     }
 
-    void zeroCounter()
-    {
+    void zeroCounter() {
         this->copy_count = 0;
     }
-    void changeState(bool state)
-    {
-        this->throw_state=state;
+
+    void changeState(bool state) {
+        this->throw_state = state;
     }
 
 private:
@@ -102,8 +94,7 @@ int ExceptionThrowingType::copy_count = 0;
 bool ExceptionThrowingType::throw_state = false;
 
 
-bool testTaskManagerPrintTasksByType()
-{
+bool testTaskManagerPrintTasksByType() {
     TaskManager manager;
     Task task1(1, TaskType::Documentation, "Document API methods");
     Task task2(5, TaskType::Development, "Refactor core module");
@@ -154,32 +145,34 @@ bool testTaskManagerPrintTasksByType()
     return true;
 }
 
-bool testListBasic()
-{
+bool testListBasic() {
     // Test default constructor
     SortedList<int> list;
-    if (list.length() != 0)
+    if (list.length() != 0) {
         return false;
+    }
 
     // Test insert and length
     list.insert(5);
     list.insert(3);
     list.insert(8);
-    if (list.length() != 3)
+    if (list.length() != 3) {
         return false;
+    }
 
     // Test copy constructor
     SortedList<int> copy(list);
-    if (copy.length() != 3)
+    if (copy.length() != 3) {
         return false;
+    }
 
     // Check copied elements
     auto it_copy = copy.begin();
     auto it_list = list.begin();
-    for (int i = 0; i < list.length(); ++i)
-    {
-        if ((*it_copy != *it_list) || (&(*it_copy) == &(*it_list)))
+    for (int i = 0; i < list.length(); ++i) {
+        if ((*it_copy != *it_list) || (&(*it_copy) == &(*it_list))) {
             return false;
+        }
         ++it_copy;
         ++it_list;
     }
@@ -187,45 +180,44 @@ bool testListBasic()
     // Test assignment operator
     SortedList<int> another_list;
     another_list = list;
-    if (another_list.length() != 3)
+    if (another_list.length() != 3) {
         return false;
+    }
 
     // Check assigned elements
     it_list = list.begin();
     auto it_another_list = another_list.begin();
-    for (int i = 0; i < list.length(); ++i)
-    {
-        if ((*it_another_list != *it_list) || (&(*it_another_list) == &(*it_list)))
+    for (int i = 0; i < list.length(); ++i) {
+        if ((*it_another_list != *it_list) ||
+            (&(*it_another_list) == &(*it_list))) {
             return false;
+        }
         ++it_another_list;
         ++it_list;
     }
 
     // Ensure deep copy
     list.insert(10);
-    if (another_list.length() != 3)
+    if (another_list.length() != 3) {
         return false;
+    }
 
     return true;
 }
 
 
-
-bool testListExceptions()
-{
+bool testListExceptions() {
     using mtm::SortedList;
 
     SortedList<int> list;
 
-    // Attempt to increment an iterator past the end of the list
-    try
-    {
+// Attempt to increment an iterator past the end of the list
+    try {
         auto it = list.end();
         ++it;         // This should throw an exception
         return false; // If no exception is thrown, the test should fail
     }
-    catch (const std::out_of_range &e)
-    {
+    catch (const std::out_of_range &e) {
         // Exception is expected, so the test should pass
     }
 
@@ -236,8 +228,7 @@ bool testListExceptions()
     list.insert(1);
 
     // Attempt to increment an iterator past the end of the list after insertion
-    try
-    {
+    try {
         auto it = list.begin();
         ++it;
         ++it;
@@ -246,20 +237,18 @@ bool testListExceptions()
         ++it;         // This should throw an exception
         return false; // If no exception is thrown, the test should fail
     }
-    catch (const std::out_of_range &e)
-    {
+    catch (const std::out_of_range &e) {
         // Exception is expected, so the test should pass
     }
 
     // Attempt to remove using an end iterator (which should be invalid)
-    try
-    {
+    try {
         auto endIt = list.end();
-        list.remove(endIt); // This should not throw an exception but should handle gracefully
+        list.remove(
+                endIt); // This should not throw an exception but should handle gracefully
         // No exception expected, so no assert here
     }
-    catch (...)
-    {
+    catch (...) {
         return false; // If any exception is thrown, the test should fail
     }
 
@@ -270,72 +259,61 @@ bool testListExceptions()
     ++it;
     ++it; // Now it should be invalid (past end)
 
-    try
-    {
+    try {
         ++it;         // Incrementing further should throw an exception
         return false; // If no exception is thrown, the test should fail
     }
-    catch (const std::out_of_range &e)
-    {
+    catch (const std::out_of_range &e) {
         // Exception is expected, so the test should pass
     }
 
     ////
 
     // Test exception safety in copy constructor
-    try
-    {
+    try {
         SortedList<int> list;
         list.insert(1);
         list.insert(2);
         SortedList<int> copy(list); // This should not throw
     }
-    catch (...)
-    {
+    catch (...) {
         return false;
     }
 
     // Test exception safety in assignment operator
-    try
-    {
+    try {
         SortedList<int> list;
         list.insert(1);
         list.insert(2);
         SortedList<int> another_list;
         another_list = list; // This should not throw
     }
-    catch (...)
-    {
+    catch (...) {
         return false;
     }
 
     // Ensure proper memory management in case of exceptions (Mock the exception)
-    try
-    {
+    try {
         SortedList<int> list;
         list.insert(1);
         list.insert(2);
         // Simulate exception during copy constructor
 
-        struct MockException : public std::exception
-        {
+        struct MockException : public std::exception {
         };
         throw MockException();
         SortedList<int> copy(list);
         return false; // Should not reach here
     }
-    catch (const std::exception &)
-    {
+    catch (const std::exception &) {
         // Expected behavior
     }
 
     return true;
 }
 
-bool testCopyConstructorExceptionSafety()
-{
-    try
-    {
+bool testCopyConstructorExceptionSafety() {
+    try {
         ExceptionThrowingType x(1);
         x.zeroCounter();
         x.changeState(false);
@@ -346,15 +324,14 @@ bool testCopyConstructorExceptionSafety()
         // Force an exception during the copy constructor
         // add flag
         x.changeState(true);
-        SortedList<ExceptionThrowingType> copy(list); // Should throw std::bad_alloc
+        SortedList<ExceptionThrowingType> copy(
+                list); // Should throw std::bad_alloc
         return false;                                 // If no exception is thrown, the test fails
     }
-    catch (const std::bad_alloc &)
-    {
+    catch (const std::bad_alloc &) {
         // Expected exception was thrown
     }
-    catch (...)
-    {
+    catch (...) {
         return false; // Unexpected exception
     }
 
@@ -362,9 +339,7 @@ bool testCopyConstructorExceptionSafety()
 }
 
 
-
-bool testTaskManager()
-{
+bool testTaskManager() {
     TaskManager tm;
 
     // Create some tasks
@@ -404,8 +379,7 @@ bool testTaskManager()
     return true;
 }
 
-bool testTaskManagerAssignTask()
-{
+bool testTaskManagerAssignTask() {
     TaskManager manager;
     Task task1(1, TaskType::Documentation, "Document API methods");
     Task task2(5, TaskType::Development, "Refactor core module");
@@ -436,13 +410,11 @@ bool testTaskManagerAssignTask()
     manager.assignTask("Hank", task9);
     manager.assignTask("Bonie", task10);
 
-    try
-    {
+    try {
         manager.assignTask("boom", task11);
         return false; // should have thrown exception
     }
-    catch (std::exception &e)
-    {
+    catch (std::exception &e) {
     }
 
     manager.assignTask("Bob", task12);
@@ -477,51 +449,44 @@ bool testTaskManagerAssignTask()
 
 testFunc tests[] = {
 #define X(name) name,
-    TESTS_NAMES
+        TESTS_NAMES
 #undef X
 };
 
 const char *tests_names[] = {
 #define X(name) #name,
-    TESTS_NAMES
+        TESTS_NAMES
 #undef X
 };
 using mtm::SortedList;
 
-template <typename T>
-void printList(const mtm::SortedList<T> &list, std::ostream &os=std::cout)
-{
-    for (auto it = list.begin(); it != list.end(); ++it)
-    {
+template<typename T>
+void printList(const mtm::SortedList<T> &list, std::ostream &os = std::cout) {
+    for (auto it = list.begin(); it != list.end(); ++it) {
         os << *it << " ";
     }
     os << std::endl;
 }
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     int number_of_tests = sizeof(tests) / sizeof(tests[0]);
 
-    if (argc == 1)
-    {
-        for (int test_idx = 0; test_idx < number_of_tests; test_idx++)
-        {
+    if (argc == 1) {
+        for (int test_idx = 0; test_idx < number_of_tests; test_idx++) {
             std::cout << "Running test " << test_idx + 1 << std::endl;
             RUN_TEST(tests[test_idx], tests_names[test_idx]);
             cout << endl;
         }
         return 0;
     }
-    if (argc != 2)
-    {
+    if (argc != 2) {
         std::cout << "Usage: tests <test index>" << std::endl;
         return 0;
     }
 
     int test_idx = strtol(argv[1], NULL, 10);
-    if (test_idx < 1 || test_idx > number_of_tests)
-    {
+    if (test_idx < 1 || test_idx > number_of_tests) {
         std::cerr << "Invalid test index " << test_idx << std::endl;
         return 0;
     }

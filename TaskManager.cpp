@@ -46,12 +46,11 @@ void TaskManager::completeTask(const string &personName) {
 Task addPriority(Task task, int priority, TaskType type);
 
 Task addPriority(Task task, int priority, TaskType type) {
-    if (task.getType() == type) {
-        return Task(task.getPriority() + priority, task.getType(),
-                    task.getDescription());
-    } else {
-        return Task(task);
-    }
+    Task newTask(task.getPriority() + (task.getType() == type) * priority,
+                 task.getType(),
+                 task.getDescription());
+    newTask.setId(task.getId());
+    return newTask;
 }
 
 

@@ -172,10 +172,17 @@ namespace mtm {
         if (this == &list) {
             return *this;
         }
-        SortedList<T>::Node *temp = new Node(*list.head);
-        delete this->head;
-        size = list.size;
-        head = temp;
+        if (list.head == nullptr) {
+            delete this->head;
+            this->head = nullptr;
+        } else {
+            SortedList<T>::Node *temp = new Node(*list.head);
+            if (head != nullptr) {
+                delete this->head;
+            }
+            size = list.size;
+            head = temp;
+        }
         return *this;
     }
 

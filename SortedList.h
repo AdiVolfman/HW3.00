@@ -221,6 +221,7 @@ namespace mtm {
                 prevPtr.ptr->next = currPtr.ptr->next;
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;
+                size--;
             }
             //else {
             //     throw std::out_of_range("Iterator do not exist");
@@ -230,8 +231,8 @@ namespace mtm {
             this->head->next = nullptr;
             delete head;
             this->head = temp;
+            size--;
         }
-        size--;
     }
 
 

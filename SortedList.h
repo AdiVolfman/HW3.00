@@ -33,9 +33,7 @@ namespace mtm {
         void insert(const T &newValue);
         void remove(const SortedList::ConstIterator &iterator);
         int length() const;
-        template<typename U>
-        friend std::ostream &
-        operator<<(std::ostream &output, const SortedList<U> &list);
+
         template<class Predict>
         SortedList<T> filter(Predict p) const;
         template<class Operation>

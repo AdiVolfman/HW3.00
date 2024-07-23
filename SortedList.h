@@ -242,15 +242,6 @@ namespace mtm {
         return this->size;
     }
 
-    template<typename T>
-    std::ostream &operator<<(std::ostream &output, const SortedList<T> &list) {
-        output << "start" << std::endl;
-        for (T val: list) {
-            output << val << std::endl;
-        }
-        output << "end!" << std::endl;
-        return output;
-    }
 
     template<typename T>
     typename SortedList<T>::ConstIterator SortedList<T>::begin() const {

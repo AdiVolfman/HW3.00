@@ -36,7 +36,7 @@ void TaskManager::completeTask(const string &personName) {
     for (int i = 0; i < personAmount; i++) {
         if (personName == (*persons[i]).getName()) {
             (*persons[i]).completeTask();
-            taskCounter--;
+            //taskCounter--;
             return;
         }
     }

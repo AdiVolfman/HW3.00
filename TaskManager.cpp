@@ -1,23 +1,14 @@
 #include "TaskManager.h"
 
-TaskManager::TaskManager() : personAmount(0), taskCounter(0) {
-    for (int i = 0; i < MAX_PERSONS; ++i) {
-        persons[i] = nullptr;
-    }
-}
+TaskManager::TaskManager() : personAmount(0), taskCounter(0) {}
 
-TaskManager::~TaskManager() {
-    for (int i = 0; i < personAmount; i++) {
-        delete persons[i];
-    }
-}
 
 void TaskManager::assignTask(const string &personName, const Task &task) {
     Task temp = task;
     temp.setId(taskCounter);
     for (int i = 0; i < personAmount; i++) {
-        if (personName == (*persons[i]).getName()) {
-            (*persons[i]).assignTask(temp);
+        if (personName == persons[i].getName()) {
+            persons[i].assignTask(temp);
             taskCounter++;
             return;
         }
@@ -25,8 +16,8 @@ void TaskManager::assignTask(const string &personName, const Task &task) {
     if (personAmount == MAX_PERSONS) {
         throw std::runtime_error("Task manager is full");
     } else {
-        persons[personAmount] = new Person(personName);
-        (*persons[personAmount]).assignTask(temp);
+        persons[personAmount] = Person(personName);
+        persons[personAmount].assignTask(temp);
         taskCounter++;
         personAmount++;
     }
@@ -34,8 +25,8 @@ void TaskManager::assignTask(const string &personName, const Task &task) {
 
 void TaskManager::completeTask(const string &personName) {
     for (int i = 0; i < personAmount; i++) {
-        if (personName == (*persons[i]).getName()) {
-            (*persons[i]).completeTask();
+        if (personName == persons[i].getName()) {
+            persons[i].completeTask();
             //taskCounter--;
             return;
         }
@@ -56,16 +47,16 @@ Task addPriority(Task &task, int priority, TaskType type) {
 
 void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     for (int i = 0; i < personAmount; i++) {
-        SortedList<Task> temp = (*persons[i]).getTasks().apply([=](Task &task) {
+        SortedList<Task> temp = persons[i].getTasks().apply([=](Task &task) {
             return addPriority(task, priority, type);
         });
-        (*persons[i]).setTasks(temp);
+        persons[i].setTasks(temp);
     }
 }
 
 void TaskManager::printAllEmployees() const {
     for (int i = 0; i < personAmount; i++) {
-        std::cout << (*persons[i]) << std::endl;
+        std::cout << persons[i] << std::endl;
     }
 }
 
@@ -73,7 +64,7 @@ void TaskManager::printAllEmployees() const {
 SortedList<Task> TaskManager::mergeAll() const {
     SortedList<Task> all;
     for (int i = 0; i < personAmount; i++) {
-        for (Task task: (*persons[i]).getTasks()) {
+        for (Task task: persons[i].getTasks()) {
             all.insert(task);
         }
     }

@@ -5,40 +5,91 @@
 
 
 namespace mtm {
-
+/**
+ * @brief Class managing a sorted node structure.
+ */
     template<typename T>
     class SortedList {
     private:
+        /**
+ * @brief Class managing Node memory structure.
+ */
         class Node {
         private:
-            T value;
-            Node *next;
+            T value; // value of each node, according to type of <typename>
+            Node *next; // pointer to next chain in node.
+            /**
+* @brief copies T to head, points *next to nullptr.
+*/
             Node(const T &val);
+            /**
+* @brief copies T to head, points *next to *nextPtr.
+*/
             Node(const T &val, SortedList::Node *nextPtr);
+            /**
+* @brief copies T to head, points *next to *nextPtr.
+*/
             Node(const SortedList<T>::Node &node);
+            /**
+* @brief destructor to release memory.
+*/
             ~Node();
+
             friend SortedList<T>;
         };
 
         SortedList<T>::Node *head;
     public:
+        /**
+ * @brief points head to nullptr.
+ */
         SortedList();
+        /**
+ * @brief created new node, with list's node copied to it.
+ */
         SortedList(const SortedList &list);
+        /**
+ * @brief puts in *this all values of *list.
+ */
         SortedList<T> &operator=(const SortedList &list);
+        /**
+ * @brief deletes *this.head
+ */
         ~SortedList();
+
 
         class ConstIterator;
 
+/**
+ * @brief inserts T in a sorted manner, considering the operator > of <typename T> .
+ */
         void insert(const T &newValue);
+        /**
+ * @brief removes a specific node from sortedlist.
+ */
         void remove(const SortedList::ConstIterator &iterator);
+        /**
+ * @brief returns amount of nodes are in sorted list
+ */
         int length() const;
 
+        /**
+ * @brief returns a new list of elements matching "Predict" condition .
+ */
         template<class Predict>
         SortedList<T> filter(Predict p) const;
+        /**
+* @brief returns a new list of elements after applying "Operation" command.
+*/
         template<class Operation>
         SortedList<T> apply(Operation op) const;
-
+        /**
+* @brief points ptr to head of list.
+*/
         ConstIterator begin() const;
+        /**
+* @brief points ptr to nullptr.
+*/
         ConstIterator end() const;
         /**
          *
@@ -66,7 +117,9 @@ namespace mtm {
 
     };
 
-
+    /**
+* @brief Class that allows us to go threw all data in list in order.
+*/
     template<class T>
     class SortedList<T>::ConstIterator {
     private:
@@ -81,8 +134,17 @@ namespace mtm {
 
         friend class SortedList<T>;
 
+        /**
+* @brief moves iterator to next value.
+*/
         ConstIterator &operator++();
+        /**
+* @brief compares between two iterators.
+*/
         bool operator!=(const ConstIterator &other) const;
+        /**
+* @brief returns reference to current element of the list.
+*/
         const T &operator*();
         /**
          * the class should support the following public interface:

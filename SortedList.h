@@ -21,7 +21,6 @@ namespace mtm {
         };
 
         SortedList<T>::Node *head;
-        int size;
     public:
         SortedList();
         SortedList(const SortedList &list);
@@ -66,28 +65,6 @@ namespace mtm {
          */
 
     };
-
-    template<typename T>
-    template<class Operation>
-    SortedList<T> SortedList<T>::apply(Operation op) const {
-        SortedList<T> newS;
-        for (T val: *this) {
-            newS.insert(op(val));
-        }
-        return newS;
-    }
-
-    template<typename T>
-    template<class Predict>
-    SortedList<T> SortedList<T>::filter(Predict p) const {
-        SortedList<T> newS;
-        for (T val: (*this)) {
-            if (p(val)) {
-                newS.insert(val);
-            }
-        }
-        return newS;
-    }
 
 
     template<class T>
@@ -159,11 +136,11 @@ namespace mtm {
 
 
     template<typename T>
-    SortedList<T>::SortedList():head(nullptr), size(0) {}
+    SortedList<T>::SortedList():head(nullptr) {}
 
     template<typename T>
     SortedList<T>::SortedList(const SortedList<T> &list):
-            head(new SortedList<T>::Node(*list.head)), size(list.size) {}
+            head(new SortedList<T>::Node(*list.head)) {}
 
     template<typename T>
     SortedList<T> &SortedList<T>::operator=(const SortedList<T> &list) {
@@ -178,7 +155,6 @@ namespace mtm {
             if (head != nullptr) {
                 delete this->head;
             }
-            size = list.size;
             head = temp;
         }
         return *this;
@@ -204,7 +180,6 @@ namespace mtm {
             }
             ptr->next = new Node(newValue, ptr->next);
         }
-        size++;
     }
 
     template<typename T>
@@ -221,7 +196,6 @@ namespace mtm {
                 prevPtr.ptr->next = currPtr.ptr->next;
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;
-                size--;
             }
             //else {
             //     throw std::out_of_range("Iterator do not exist");
@@ -231,16 +205,40 @@ namespace mtm {
             this->head->next = nullptr;
             delete head;
             this->head = temp;
-            size--;
         }
     }
 
 
     template<typename T>
     int SortedList<T>::length() const {
-        return this->size;
+        int count = 0;
+        for (T val: *this) {
+            count++;
+        }
+        return count;
     }
 
+    template<typename T>
+    template<class Operation>
+    SortedList<T> SortedList<T>::apply(Operation op) const {
+        SortedList<T> newS;
+        for (T val: *this) {
+            newS.insert(op(val));
+        }
+        return newS;
+    }
+
+    template<typename T>
+    template<class Predict>
+    SortedList<T> SortedList<T>::filter(Predict p) const {
+        SortedList<T> newS;
+        for (T val: (*this)) {
+            if (p(val)) {
+                newS.insert(val);
+            }
+        }
+        return newS;
+    }
 
     template<typename T>
     typename SortedList<T>::ConstIterator SortedList<T>::begin() const {

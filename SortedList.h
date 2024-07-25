@@ -227,10 +227,12 @@ namespace mtm {
             //}
         } else {
             //case that we remove the head
-            Node *temp = head->next;
-            this->head->next = nullptr;
-            delete head;
-            this->head = temp;
+            if (currPtr.ptr != nullptr) {
+                Node *temp = head->next;
+                this->head->next = nullptr;
+                delete head;
+                this->head = temp;
+            }
         }
     }
 
@@ -238,7 +240,9 @@ namespace mtm {
     template<typename T>
     int SortedList<T>::length() const {
         int count = 0;
-        for (T val: *this) {
+        Node *temp = head;
+        while (temp != nullptr) {
+            temp = temp->next;
             count++;
         }
         return count;

@@ -6,6 +6,7 @@ TaskManager::TaskManager() : personAmount(0), taskCounter(0) {}
 void TaskManager::assignTask(const string &personName, const Task &task) {
     Task temp = task;
     temp.setId(taskCounter);
+    //case: person is existed
     for (int i = 0; i < personAmount; i++) {
         if (personName == persons[i].getName()) {
             persons[i].assignTask(temp);
@@ -13,9 +14,11 @@ void TaskManager::assignTask(const string &personName, const Task &task) {
             return;
         }
     }
+    //case: person is not existed and the TaskManager is full
     if (personAmount == MAX_PERSONS) {
         throw std::runtime_error("Task manager is full");
     } else {
+        //case: new person in the TaskManager
         persons[personAmount] = Person(personName);
         persons[personAmount].assignTask(temp);
         taskCounter++;

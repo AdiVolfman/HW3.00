@@ -6,120 +6,91 @@
 
 namespace mtm {
 /**
- * @brief Class managing a sorted node structure.
+ * @brief Class managing a sorted list structure.
  */
     template<typename T>
     class SortedList {
     private:
         /**
- * @brief Class managing Node memory structure.
- */
+        * @brief Class managing Node memory structure.
+        */
         class Node {
         private:
             T value; // value of each node, according to type of <typename>
             Node *next; // pointer to next chain in node.
-            /**
-* @brief copies T to head, points *next to nullptr.
-*/
             Node(const T &val);
-            /**
-* @brief copies T to head, points *next to *nextPtr.
-*/
             Node(const T &val, SortedList::Node *nextPtr);
-            /**
-* @brief copies T to head, points *next to *nextPtr.
-*/
             Node(const SortedList<T>::Node &node);
-            /**
-* @brief destructor to release memory.
-*/
             ~Node();
-
             friend SortedList<T>;
         };
 
-        SortedList<T>::Node *head;
+        SortedList<T>::Node *head; //pointer to the head of the list
     public:
         /**
- * @brief points head to nullptr.
- */
+        * @brief empty constructor.
+        */
         SortedList();
+
         /**
- * @brief created new node, with list's node copied to it.
- */
+        * @brief copy constructor.
+        */
         SortedList(const SortedList &list);
+
         /**
- * @brief puts in *this all values of *list.
- */
+        * @brief assignment operator.
+        */
         SortedList<T> &operator=(const SortedList &list);
+
         /**
- * @brief deletes *this.head
- */
+        * @brief destructor
+        */
         ~SortedList();
 
 
         class ConstIterator;
 
-/**
- * @brief inserts T in a sorted manner, considering the operator > of <typename T> .
- */
+        /**
+        * @brief inserts T in a sorted manner, considering the operator > of <typename T> .
+        */
         void insert(const T &newValue);
+
         /**
- * @brief removes a specific node from sortedlist.
- */
+        * @brief removes a specific node from sortedlist.
+        */
         void remove(const SortedList::ConstIterator &iterator);
+
         /**
- * @brief returns amount of nodes are in sorted list
- */
+        * @brief returns amount of nodes are in sorted list
+        */
         int length() const;
 
         /**
- * @brief returns a new list of elements matching "Predict" condition .
- */
+        * @brief returns a new list of elements matching "Predict" condition .
+        */
         template<class Predict>
         SortedList<T> filter(Predict p) const;
+
         /**
-* @brief returns a new list of elements after applying "Operation" command.
-*/
+        * @brief returns a new list of elements after applying "Operation" command on each value.
+        */
         template<class Operation>
         SortedList<T> apply(Operation op) const;
-        /**
-* @brief points ptr to head of list.
-*/
-        ConstIterator begin() const;
-        /**
-* @brief points ptr to nullptr.
-*/
-        ConstIterator end() const;
-        /**
-         *
-         * the class should support the following public interface:
-         * if needed, use =defualt / =delete
-         *
-         * constructors and destructor:
-         * 1. SortedList() - creates an empty list.
-         * 2. copy constructor
-         * 3. operator= - assignment operator
-         * 4. ~SortedList() - destructor
-         *
-         * iterator:
-         * 5. class ConstIterator;
-         * 6. begin method
-         * 7. end method
-         *
-         * functions:
-         * 8. insert - inserts a new element to the list
-         * 9. remove - removes an element from the list
-         * 10. length - returns the number of elements in the list
-         * 11. filter - returns a new list with elements that satisfy a given condition
-         * 12. apply - returns a new list with elements that were modified by an operation
-         */
 
+        /**
+        * @brief returns iterator to the start of the list.
+        */
+        ConstIterator begin() const;
+
+        /**
+        * @brief returns iterator to the end of the list.
+        */
+        ConstIterator end() const;
     };
 
     /**
-* @brief Class that allows us to go threw all data in list in order.
-*/
+    * @brief Class that allows us to go threw all data in list in order.
+    */
     template<class T>
     class SortedList<T>::ConstIterator {
     private:
@@ -135,33 +106,19 @@ namespace mtm {
         friend class SortedList<T>;
 
         /**
-* @brief moves iterator to next value.
-*/
+        * @brief moves iterator to next value.
+        */
         ConstIterator &operator++();
+
         /**
-* @brief compares between two iterators.
-*/
+        * @brief compares between two iterators returns true iff different.
+        */
         bool operator!=(const ConstIterator &other) const;
+
         /**
-* @brief returns reference to current element of the list.
-*/
+        * @brief returns reference to current element of the list.
+        */
         const T &operator*();
-        /**
-         * the class should support the following public interface:
-         * if needed, use =defualt / =delete
-         *
-         * constructors and destructor:
-         * 1. a ctor(or ctors) your implementation needs
-         * 2. copy constructor
-         * 3. operator= - assignment operator
-         * 4. ~ConstIterator() - destructor
-         *
-         * operators:
-         * 5. operator* - returns the element the iterator points to
-         * 6. operator++ - advances the iterator to the next element
-         * 7. operator!= - returns true if the iterator points to a different element
-         *
-         */
     };
 
 
@@ -183,6 +140,8 @@ namespace mtm {
             try {
                 next = new Node(*(node.next));
             } catch (const std::bad_alloc &error) {
+                //got in here if the recursive allocate is not succeed.
+                // free the memory and throw exception.
                 delete this;
                 throw;
             }
@@ -234,9 +193,11 @@ namespace mtm {
     template<typename T>
     void SortedList<T>::insert(const T &newValue) {
         if (head == nullptr || newValue > this->head->value) {
+            //case the new value should be first in the list
             head = new Node(newValue, head);
         } else {
             SortedList<T>::Node *ptr = this->head;
+            //finding the elements the new value need to be between.
             while (ptr->next != nullptr && ptr->next->value > newValue) {
                 ptr = ptr->next;
             }
@@ -248,8 +209,10 @@ namespace mtm {
     void SortedList<T>::remove(const SortedList::ConstIterator &iterator) {
         ConstIterator currPtr = this->head;
         if (currPtr != iterator) {
+            //case the iterator is not the beginning of the list
             ++currPtr;
             ConstIterator prevPtr = this->head;
+            //finding iterator to the element before the removable item
             while (currPtr != nullptr && currPtr != iterator) {
                 ++currPtr;
                 ++prevPtr;
@@ -263,6 +226,7 @@ namespace mtm {
             //     throw std::out_of_range("Iterator do not exist");
             //}
         } else {
+            //case that we remove the head
             Node *temp = head->next;
             this->head->next = nullptr;
             delete head;

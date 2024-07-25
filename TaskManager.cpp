@@ -34,7 +34,7 @@ void TaskManager::completeTask(const string &personName) {
             return;
         }
     }
-    throw std::runtime_error("Person isn't exist");
+    //throw std::runtime_error("Person isn't exist");
 }
 
 Task addPriority(const Task &task, int priority, TaskType type);

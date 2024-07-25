@@ -252,7 +252,7 @@ namespace mtm {
     template<class Operation>
     SortedList<T> SortedList<T>::apply(Operation op) const {
         SortedList<T> newS;
-        for (T val: *this) {
+        for (const T &val: *this) {
             newS.insert(op(val));
         }
         return newS;
@@ -262,7 +262,7 @@ namespace mtm {
     template<class Predict>
     SortedList<T> SortedList<T>::filter(Predict p) const {
         SortedList<T> newS;
-        for (T val: (*this)) {
+        for (const T &val: (*this)) {
             if (p(val)) {
                 newS.insert(val);
             }

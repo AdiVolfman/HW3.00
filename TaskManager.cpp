@@ -37,9 +37,9 @@ void TaskManager::completeTask(const string &personName) {
     throw std::runtime_error("Person isn't exist");
 }
 
-Task addPriority(Task &task, int priority, TaskType type);
+Task addPriority(const Task &task, int priority, TaskType type);
 
-Task addPriority(Task &task, int priority, TaskType type) {
+Task addPriority(const Task &task, int priority, TaskType type) {
     Task newTask(task.getPriority() + (task.getType() == type) * priority,
                  task.getType(),
                  task.getDescription());
@@ -50,9 +50,10 @@ Task addPriority(Task &task, int priority, TaskType type) {
 
 void TaskManager::bumpPriorityByType(TaskType type, int priority) {
     for (int i = 0; i < personAmount; i++) {
-        SortedList<Task> temp = persons[i].getTasks().apply([=](Task &task) {
-            return addPriority(task, priority, type);
-        });
+        SortedList<Task> temp = persons[i].getTasks().apply(
+                [=](const Task &task) {
+                    return addPriority(task, priority, type);
+                });
         persons[i].setTasks(temp);
     }
 }
@@ -67,7 +68,7 @@ void TaskManager::printAllEmployees() const {
 SortedList<Task> TaskManager::mergeAll() const {
     SortedList<Task> all;
     for (int i = 0; i < personAmount; i++) {
-        for (Task task: persons[i].getTasks()) {
+        for (const Task &task: persons[i].getTasks()) {
             all.insert(task);
         }
     }
@@ -76,17 +77,17 @@ SortedList<Task> TaskManager::mergeAll() const {
 
 void TaskManager::printAllTasks() const {
     SortedList<Task> all = mergeAll();
-    for (Task task: all) {
+    for (const Task &task: all) {
         std::cout << task << std::endl;
     }
 }
 
 void TaskManager::printTasksByType(TaskType type) const {
     SortedList<Task> all = mergeAll();
-    SortedList<Task> filtered = all.filter([=](Task task) {
+    SortedList<Task> filtered = all.filter([=](const Task &task) {
         return task.getType() == type;
     });
-    for (Task task: filtered) {
+    for (const Task &task: filtered) {
         std::cout << task << std::endl;
     }
 }

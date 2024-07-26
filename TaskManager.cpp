@@ -34,13 +34,14 @@ void TaskManager::completeTask(const string &personName) {
             return;
         }
     }
-    //throw std::runtime_error("Person isn't exist");
 }
 
 Task addPriority(const Task &task, int priority, TaskType type);
 
 Task addPriority(const Task &task, int priority, TaskType type) {
-    Task newTask(task.getPriority() + (task.getType() == type) * priority,
+    int newPriority = task.getPriority() +
+                      (priority > 0 && task.getType() == type) * priority;
+    Task newTask(newPriority,
                  task.getType(),
                  task.getDescription());
     newTask.setId(task.getId());

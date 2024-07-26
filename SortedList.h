@@ -222,9 +222,6 @@ namespace mtm {
                 currPtr.ptr->next = nullptr;
                 delete currPtr.ptr;
             }
-            //else {
-            //     throw std::out_of_range("Iterator do not exist");
-            //}
         } else {
             //case that we remove the head
             if (currPtr.ptr != nullptr) {

@@ -102,23 +102,23 @@ bool ExceptionThrowingType::throw_state = false;
 
 bool testTaskManagerPrintTasksByType() {
     TaskManager manager;
-    Task task1(1, TaskType::Documentation, "Document API methods");
-    Task task2(5, TaskType::Development, "Refactor core module");
-    Task task3(8, TaskType::Testing, "Integration testing");
-    Task task4(5, TaskType::General, "Weekly team meeting");
-    Task task5(7, TaskType::Development, "Implement new feature");
-    Task task6(3, TaskType::Documentation, "Update user guide");
-    Task task7(-1, TaskType::Testing, "Write unit tests");
-    Task task8(2000, TaskType::Testing, "stream");
-    Task task9(6, TaskType::Development, "Fix bug in UI");
-    Task task10(4, TaskType::General, "Clean up code");
-    Task task11(2, TaskType::Documentation, "Write README");
-    Task task12(1, TaskType::Testing, "Run system tests");
-    Task task13(2, TaskType::Testing, "Run system tests");
-    Task task14(1, TaskType::Testing, "Run system tests");
-    Task task15(1, TaskType::Testing, "Run system tests");
-    Task task16(4, TaskType::General, "Clean up code");
-    Task task17(4, TaskType::General, "Clean up code");
+    const Task task1(1, TaskType::Documentation, "Document API methods");
+    const Task task2(5, TaskType::Development, "Refactor core module");
+    const Task task3(8, TaskType::Testing, "Integration testing");
+    const Task task4(5, TaskType::General, "Weekly team meeting");
+    const Task task5(7, TaskType::Development, "Implement new feature");
+    const Task task6(3, TaskType::Documentation, "Update user guide");
+    const Task task7(-1, TaskType::Testing, "Write unit tests");
+    const Task task8(2000, TaskType::Testing, "stream");
+    const Task task9(6, TaskType::Development, "Fix bug in UI");
+    const Task task10(4, TaskType::General, "Clean up code");
+    const Task task11(2, TaskType::Documentation, "Write README");
+    const Task task12(1, TaskType::Testing, "Run system tests");
+    const Task task13(2, TaskType::Testing, "Run system tests");
+    const Task task14(1, TaskType::Testing, "Run system tests");
+    const Task task15(1, TaskType::Testing, "Run system tests");
+    const Task task16(4, TaskType::General, "Clean up code");
+    const Task task17(4, TaskType::General, "Clean up code");
 
     manager.assignTask("Alice", task1);
     manager.assignTask("Bob", task2);
@@ -139,7 +139,6 @@ bool testTaskManagerPrintTasksByType() {
     manager.assignTask("Bob", task1);
 
     manager.completeTask("Dana");
-
     manager.printTasksByType(TaskType::Development);
     cout << endl;
     manager.bumpPriorityByType(TaskType::Development, 50);

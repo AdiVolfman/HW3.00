@@ -16,10 +16,10 @@ namespace mtm {
         */
         class Node {
         private:
-            T value; // value of each node, according to type of <typename>
             Node *next; // pointer to next chain in node.
+            T value; // value of each node, according to type of <typename>
             explicit Node(const T &val);
-            Node(const T &val, SortedList::Node *nextPtr);
+            Node(SortedList::Node *nextPtr, const T &val);
             Node(const SortedList<T>::Node &node);
             ~Node();
             friend SortedList<T>;
@@ -126,25 +126,19 @@ namespace mtm {
 
 namespace mtm {
     template<typename T>
-    SortedList<T>::Node::Node(const T &val) : value(T(val)), next(nullptr) {
+    SortedList<T>::Node::Node(const T &val) :  next(nullptr), value(T(val)) {
     }
 
     template<typename T>
-    SortedList<T>::Node::Node(const T &val, SortedList::Node *nextPtr) :value(
-            T(val)), next(nextPtr) {}
+    SortedList<T>::Node::Node(SortedList::Node *nextPtr, const T &val) : next(
+            nextPtr), value(
+            T(val)) {}
 
     template<typename T>
-    SortedList<T>::Node::Node(const SortedList::Node &node): value(node.value),
-                                                             next(nullptr) {
+    SortedList<T>::Node::Node(const SortedList::Node &node):  next(nullptr),
+                                                              value(node.value) {
         if (node.next != nullptr) {
-            try {
-                next = new Node(*(node.next));
-            } catch (const std::bad_alloc &error) {
-                //got in here if the recursive allocate is not succeed.
-                // free the memory and throw exception.
-                delete this;
-                throw std::bad_alloc();
-            }
+            next = new Node(*(node.next));
         }
     }
 
@@ -169,7 +163,9 @@ namespace mtm {
             return *this;
         }
         if (list.head == nullptr) {
-            delete this->head;
+            if (this->head != nullptr) {
+                delete this->head;
+            }
             this->head = nullptr;
         } else {
             SortedList<T>::Node *temp = new Node(*list.head);
@@ -194,14 +190,14 @@ namespace mtm {
     void SortedList<T>::insert(const T &newValue) {
         if (head == nullptr || newValue > this->head->value) {
             //case the new value should be first in the list
-            head = new Node(newValue, head);
+            head = new Node(head, newValue);
         } else {
             SortedList<T>::Node *ptr = this->head;
             //finding the elements the new value need to be between.
             while (ptr->next != nullptr && ptr->next->value > newValue) {
                 ptr = ptr->next;
             }
-            ptr->next = new Node(newValue, ptr->next);
+            ptr->next = new Node(ptr->next, newValue);
         }
     }
 

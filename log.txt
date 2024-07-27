@@ -1,3 +1,63 @@
+* commit f506034d274f5d058d820e61a71c8efbc6ee96e9
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Sat Jul 27 11:30:49 2024 +0300
+| 
+|     changing dry part and adding const and explicit to some functions
+| 
+|  SortedList.h |  14 +++++++-------
+|  dry.pdf      | Bin 106451 -> 0 bytes
+|  2 files changed, 7 insertions(+), 7 deletions(-)
+| 
+* commit c60094667aed291d83fedec5d59412b7c81700a9
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Fri Jul 26 19:32:32 2024 +0300
+| 
+|     delete some exceptions and fix negative bump priority
+| 
+|  SortedList.h    |  3 ---
+|  TaskManager.cpp |  5 +++--
+|  ourTest.cpp     | 35 +++++++++++++++++------------------
+|  3 files changed, 20 insertions(+), 23 deletions(-)
+| 
+* commit 4264894026d67383f62ce85d293bb81ba3a3ffc7
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Thu Jul 25 22:46:14 2024 +0300
+| 
+|     adding test scripts
+| 
+|  scripts/test.sh | 2 +-
+|  1 file changed, 1 insertion(+), 1 deletion(-)
+| 
+* commit 8e43c9c5ab801216b4fc632721921ca2e8e97945
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Thu Jul 25 22:03:12 2024 +0300
+| 
+|     fix exceptions bug
+| 
+|  TaskManager.cpp |   2 +-
+|  ourTest.cpp     | 962 +++++++++++++++++++++++++++++++++++++++++++++++++++++-
+|  2 files changed, 946 insertions(+), 18 deletions(-)
+| 
+* commit 3ba66cb62fc898cff3586145d6243e9053597809
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Thu Jul 25 17:40:50 2024 +0300
+| 
+|     updating for iterator to be useable with const
+| 
+|  SortedList.h    |  4 ++--
+|  TaskManager.cpp | 19 ++++++++++---------
+|  2 files changed, 12 insertions(+), 11 deletions(-)
+| 
+* commit 78d01595dfabe6cf81dbe31100bd0b06e368766d
+| Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
+| Date:   Thu Jul 25 09:17:59 2024 +0300
+| 
+|     adding dry part
+| 
+|  dry.pdf | Bin 0 -> 106451 bytes
+|  log.txt | 352 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+|  2 files changed, 352 insertions(+)
+| 
 * commit ac22661aa005682d19e9334ab5753b9f37ded013
 | Author: LinoyGeva <linoy.geva@campus.technion.ac.il>
 | Date:   Thu Jul 25 09:14:49 2024 +0300
@@ -34,24 +94,6 @@
 | 
 |  SortedList.h | 58 ++++++++++++++++++++++++++++------------------------------
 |  1 file changed, 28 insertions(+), 30 deletions(-)
-|   
-| * commit 7813c71c98903f003027ceaa3c9f5039ca9ef815
-|/| Merge: 9d19147 70b1478
-| | Author: linoy geva <linoy.geva@campus.technion.ac.il>
-| | Date:   Wed Jul 24 13:24:38 2024 +0300
-| | 
-| |     WIP on main: 9d19147 release detractor and pass memory check. change persons array from pointer to value.
-| | 
-| * commit 70b14785ae957e5efd54068516e645771eb0b031
-|/  Author: linoy geva <linoy.geva@campus.technion.ac.il>
-|   Date:   Wed Jul 24 13:24:38 2024 +0300
-|   
-|       index on main: 9d19147 release detractor and pass memory check. change persons array from pointer to value.
-|   
-|    .gitmodules        | 6 ++++++
-|    MatamGenericTester | 1 +
-|    TechnionMatam      | 1 +
-|    3 files changed, 8 insertions(+)
 | 
 * commit 9d1914702f3e0436e9589a6fa7cdf191c3bc7c4f
 | Author: LinoyGeva <linoy.geva@campus.technion.ac.il>

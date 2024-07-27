@@ -18,7 +18,7 @@ namespace mtm {
         private:
             T value; // value of each node, according to type of <typename>
             Node *next; // pointer to next chain in node.
-            Node(const T &val);
+            explicit Node(const T &val);
             Node(const T &val, SortedList::Node *nextPtr);
             Node(const SortedList<T>::Node &node);
             ~Node();
@@ -96,7 +96,7 @@ namespace mtm {
     private:
         SortedList<T>::Node *ptr;
 
-        ConstIterator(SortedList<T>::Node *node) : ptr(node) {};
+        explicit ConstIterator(SortedList<T>::Node *node) : ptr(node) {};
     public:
         ConstIterator() = default;
         ConstIterator(const ConstIterator &iterator) = default;
@@ -118,7 +118,7 @@ namespace mtm {
         /**
         * @brief returns reference to current element of the list.
         */
-        const T &operator*();
+        const T &operator*() const;
     };
 
 
@@ -207,13 +207,13 @@ namespace mtm {
 
     template<typename T>
     void SortedList<T>::remove(const SortedList::ConstIterator &iterator) {
-        ConstIterator currPtr = this->head;
+        ConstIterator currPtr(this->head);
         if (currPtr != iterator) {
             //case the iterator is not the beginning of the list
             ++currPtr;
-            ConstIterator prevPtr = this->head;
+            ConstIterator prevPtr(this->head);
             //finding iterator to the element before the removable item
-            while (currPtr != nullptr && currPtr != iterator) {
+            while (currPtr.ptr != nullptr && currPtr != iterator) {
                 ++currPtr;
                 ++prevPtr;
             }
@@ -296,7 +296,7 @@ namespace mtm {
 
 
     template<class T>
-    const T &SortedList<T>::ConstIterator::operator*() {
+    const T &SortedList<T>::ConstIterator::operator*() const {
         if (!ptr) {
             throw std::out_of_range("Iterator out of range");
         }

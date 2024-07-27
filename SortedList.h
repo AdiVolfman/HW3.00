@@ -143,7 +143,7 @@ namespace mtm {
                 //got in here if the recursive allocate is not succeed.
                 // free the memory and throw exception.
                 delete this;
-                throw;
+                throw std::bad_alloc();
             }
         }
     }

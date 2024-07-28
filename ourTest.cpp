@@ -51,7 +51,7 @@ void printList(const mtm::SortedList<T> &list, std::ostream &os = std::cout) {
 class ExceptionThrowingType {
 public:
     static int copy_count;
-    static const int max_copies = 3; // Exception will be thrown on the third copy
+    static const int max_copies = 9; // Exception will be thrown on the third copy
     static bool throw_state;
 
     ExceptionThrowingType(int value = 0) : value(value) {}
@@ -441,7 +441,6 @@ bool testAssignmentOperatorExceptionSafety() {
         SortedList<ExceptionThrowingType> list;
         list.insert(ExceptionThrowingType(1));
         list.insert(ExceptionThrowingType(2));
-
         // Force an exception during the copy constructor
         // add flag
         SortedList<ExceptionThrowingType> copyByAssignment;
@@ -708,8 +707,11 @@ bool testAssignOperatorExceptionSafety() {
 
     try {
         SortedList<ExceptionThrowingType> listToCopy;
-        listToCopy.insert(ExceptionThrowingType(1));
-        listToCopy.insert(ExceptionThrowingType(2));
+        listToCopy.insert(1);
+        listToCopy.insert(2);
+        listToCopy.insert(3);
+        listToCopy.insert(4);
+
 
         // Force an exception during the assign operator
         // add flag

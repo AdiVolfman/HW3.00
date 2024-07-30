@@ -48,7 +48,6 @@ public:
     static const int max_copies = 3; // Exception will be thrown on the third copy
     static bool throw_state;
 
-
     ExceptionThrowingType(int value = 0) : value(value) {}
 
     // Copy constructor
